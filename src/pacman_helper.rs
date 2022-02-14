@@ -3,7 +3,7 @@ use std::{
     fs::{self, DirEntry, File},
     io::{BufRead, BufReader, Result},
     os::unix::prelude::OsStrExt,
-    process::{Command, Output},
+    process::{Command, Output, Stdio},
 };
 
 const PACMAN_LOG: &str = "/var/log/pacman.log";
@@ -121,7 +121,10 @@ pub fn do_downgrade(upgraded: Vec<&Pkg>) {
 }
 
 fn downgrade(path: &str) -> Result<Output> {
-    Command::new("pacman").arg("-Udd").arg(path).output()
+    Command::new("yes | LC_ALL=en_US.UTF-8 pacman")
+        .arg("-Udd")
+        .arg(path)
+        .output()
 }
 
 fn uninstall(pkg: &Pkg) -> Result<Output> {
