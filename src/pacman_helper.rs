@@ -3,7 +3,7 @@ use std::{
     fs::{self, DirEntry, File},
     io::{BufRead, BufReader, Result},
     os::unix::prelude::OsStrExt,
-    process::{Command, Output, Stdio},
+    process::{Command, Output},
 };
 
 const PACMAN_LOG: &str = "/var/log/pacman.log";
@@ -108,7 +108,9 @@ pub fn do_downgrade(upgraded: Vec<&Pkg>) {
                 let d_result = downgrade(c.path().to_str().expect("execute failed"));
 
                 match d_result {
-                    Ok(_) => {}
+                    Ok(o) => {
+                        println!("p:{} out:{:?}", p_name, o);
+                    }
                     Err(e) => {
                         println!("{} downgrade error, message:{}", p_name, e)
                     }
